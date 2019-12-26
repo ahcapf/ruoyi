@@ -1,32 +1,35 @@
 <template>
   <div :class="classObj" class="app-wrapper">
     <!-- <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" /> -->
-    <div class="header">
-      <div class="right-menu">
-        <span style="display:inline-block;color: #333;">注册 | 登录</span>
-        <search id="header-search" class="right-menu-item" />
-        <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
-          <div class="avatar-wrapper">
-            <img :src="avatar" class="user-avatar">
-            <i class="el-icon-caret-bottom" />
-          </div>
-          <el-dropdown-menu slot="dropdown">
-            <router-link to="/user/profile">
-              <el-dropdown-item>个人中心</el-dropdown-item>
-            </router-link>
-            <el-dropdown-item divided>
-              <span @click="logout">退出登录</span>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+    <div class="nav-box">
+      <sidebar class="sidebar-container" />
+      <div class="header">
+        <div class="right-menu">
+          <span style="display:inline-block;">注册 | 登录</span>
+          <!-- <search id="header-search" class="right-menu-item" /> -->
+          <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+            <div class="avatar-wrapper">
+              <img :src="avatar" class="user-avatar">
+              <i class="el-icon-caret-bottom" />
+            </div>
+            <el-dropdown-menu slot="dropdown">
+              <router-link to="/user/profile">
+                <el-dropdown-item>个人中心</el-dropdown-item>
+              </router-link>
+              <el-dropdown-item divided>
+                <span @click="logout">退出登录</span>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
       </div>
-  
     </div>
-    <sidebar class="sidebar-container" />
+    
     <div :class="{hasTagsView:needTagsView}" class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
         <navbar />
-        <tags-view v-if="needTagsView" />
+       
+        <!-- <tags-view v-if="needTagsView" /> -->
       </div>
       <app-main />
       <right-panel v-if="showSettings">
@@ -66,9 +69,6 @@ export default {
     ...mapGetters([ 'avatar']),
     classObj() {
       return {
-        hideSidebar: !this.sidebar.opened,
-        openSidebar: this.sidebar.opened,
-        withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile'
       }
     }
@@ -76,7 +76,8 @@ export default {
   methods: {
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
-    }
+    },
+    logout() {}
   }
 }
 </script>
@@ -123,18 +124,25 @@ export default {
   .mobile .fixed-header {
     width: 100%;
   }
+  .nav-box {
+    display: flex;
+    .sidebar-container {
+      flex: 6;
+    }
+  }
   .header {
-    height: 50px;
+    flex:1;
+    // height: 60px;
+    font-size:14px;
     overflow: hidden;
     position: relative;
-    background: #fff;
+    background: rgb(48, 65, 86);
+    color:rgb(191, 203, 217);
     box-shadow: 0 1px 4px rgba(0,21,41,.08);
   }
   .right-menu {
     float: right;
     height: 100%;
-    line-height: 50px;
-
     &:focus {
       outline: none;
     }
@@ -160,7 +168,7 @@ export default {
       .avatar-wrapper {
         // margin-top: 5px;
         position: relative;
-
+        margin-top: 10px;
         .user-avatar {
           cursor: pointer;
           width: 40px;
